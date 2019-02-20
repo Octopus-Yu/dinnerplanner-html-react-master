@@ -10,7 +10,7 @@ class Dishes extends Component {
     // We create the state to store the various statuses
     // e.g. API data loading or error
     this.state = {
-      status: "LOADING"
+      status: "LOADING",
     };
   }
 
@@ -25,7 +25,8 @@ class Dishes extends Component {
       .then(dishes => {
         this.setState({
           status: "LOADED",
-          dishes: dishes.results
+          dishes: dishes.results,
+          urlRoot: dishes.baseUri
         });
       })
       .catch(() => {
@@ -47,7 +48,13 @@ class Dishes extends Component {
         break;
       case "LOADED":
         dishesList = this.state.dishes.map(dish => (
-          <li key={dish.id}>{dish.title}</li>
+          // <li key={dish.id}>{dish.title}</li>
+          <div key={dish.id} className="card mx-2" style={{ width: "18rem", float:"left"}}>
+            <img src= {this.state.urlRoot+dish.image} className="card-img-top" />
+            <div className="card-body">
+              <h4 className="card-text text-center">{dish.title}</h4>
+            </div>
+          </div>
         ));
         break;
       default:
@@ -57,8 +64,8 @@ class Dishes extends Component {
 
     return (
       <div className="Dishes">
-        <h3>Dishes</h3>
-        <ul>{dishesList}</ul>
+        {/* <h3>Dishes</h3> */}
+        <div>{dishesList}</div>
       </div>
     );
   }

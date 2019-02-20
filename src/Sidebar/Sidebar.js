@@ -40,7 +40,7 @@ class Sidebar extends Component {
   render() {
     return (
       <div className="Sidebar">
-        <h3>This is the sidebar</h3>
+        <h3>My Dinner</h3>
         <p>
           People:
           <input
@@ -51,6 +51,37 @@ class Sidebar extends Component {
           <br />
           Total number of guests: {this.state.numberOfGuests}
         </p>
+
+        <table className="table table-sm" id="tablemenu">
+
+          <thead>
+            <tr>
+              <th>
+                Dish Name
+                                    </th>
+              <th>
+                Cost
+                                    </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>
+
+              </td>
+              <td>
+
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+        <p style={{float: "right"}} id="totalprice">SEK 0.0</p>
+        <button type="button" className="btn btn-block disabled btn-secondary" id="comfirmDinner">
+          Confirm Dinner
+                        </button>
+
       </div>
     );
   }
