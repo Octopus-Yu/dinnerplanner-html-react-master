@@ -23,7 +23,9 @@ class DishSearch extends Component {
   }
 
   handleSubmit(event) {
-    alert('Your favorite flavor is: ' + this.state.value);
+    // alert('Your favorite flavor is: ' + event.target.value);
+    // this.setState({type: event.target.value});
+    this.setState({keyword: this.refs.searchWord.value});
     event.preventDefault();
   }
 
@@ -58,7 +60,7 @@ update() {
 
 render() {
   let dshTypes = modelInstance.getDishTypes().map(dshType => (
-  <option>{dshType}</option>));
+  <option key={modelInstance.getDishTypes().indexOf(dshType)}>{dshType}</option>));
   return (
     <div id="DishSearchView">
 
@@ -68,14 +70,14 @@ render() {
 
       <form role="form" className="form-inline" style={{ float: "left" }} onSubmit={this.handleSubmit} >
         <div className="form-group px-2">
-          <input type="searchlabel" className="form-control" id="searchLabel" placeholder="Enter Key Words" />
+          <input type="searchlabel" className="form-control" id="searchLabel" placeholder="Enter Key Words" ref="searchWord"/>
         </div>
-        <select id="selectMenu" className="form-control" value={this.state.type} onChange={this.handleChange}>
+        <select id="selectMenu" className="form-control"  onChange={this.handleTypeChange}>
           {dshTypes}
 
 
         </select>
-        <button type="button" className="btn btn-primary mx-2" id="searchBtn">
+        <button type="submit" className="btn btn-primary mx-2" id="searchBtn">
           Search
           </button>
       </form>
@@ -88,7 +90,7 @@ render() {
       {/* For the dish search result */}
       <div className="row " id="dishSearch" >
 
-        <Dishes />
+        <Dishes type={this.state.type} keyword={this.state.keyword}/>
 
       </div>
     </div>

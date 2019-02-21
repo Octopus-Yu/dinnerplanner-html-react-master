@@ -6,6 +6,7 @@ import "./SelectDish.css";
 
 class SelectDish extends Component {
   render() {
+    
     return (
       <div className="SelectDish">
         {/* <h2>This is the Select Dish screen</h2> */}

@@ -10,12 +10,13 @@ class DinnerModel extends ObservableModel {
     super();
     this._numberOfGuests = 4;
     this.getNumberOfGuests();
-
+this.dishes = [];
     this.menu = [];
     this.dishTypes = dishTypes;
+    this.rootURL="";
   }
 
-  getDishTypes(){
+  getDishTypes() {
     return this.dishTypes;
   }
   getFullMenu() {
@@ -96,15 +97,72 @@ class DinnerModel extends ObservableModel {
       ;
   }
 
+  getSearchDishes(type, filter) {
+    const url = `${BASE_URL}/recipes/search?number=12&type=${type}&query=${filter}`;
+    return fetch(url, httpOptions)
+      .then(this.processResponse)
+      ;
+  }
+
+
+
   processResponse(response) {
     if (response.ok) {
       return response.json();
     }
     throw response;
   }
+
+  getSelectedInformation(id) {
+    const url = `${BASE_URL}/recipes/${id}/information`;
+    return fetch(url, httpOptions)
+      .then(this.processResponse)
+      ;
+    
+      // .then(data => {
+      //   this.getDish(id).ingredients = data.extendedIngredients;
+      //   this.getDish(id).description = data.instructions;
+      // })
+      // .then(() => this.notifyObservers())
+      // .catch(() => {
+      //   console.log("error to get the web data")
+      // });
+
+  }
+
+  //function that returns a dish of specific ID
+  getDish(id) {
+    for (let dsh of this.dishes) {
+      if (dsh.id == id) {
+        return dsh;
+      }
+    }
+    return undefined;
+  }
+  getMenuDish(id) {
+
+    for (let dsh of this.menu) {
+      if (dsh.id == id) {
+        return dsh;
+
+      }
+    }
+    return undefined;
+  }
+
+
+  getDishid(dshName) {
+    for (let dsh of this.dishes) {
+      if (dsh.title == dshName) {
+        return dsh.id;
+      }
+    }
+    return undefined;
+  }
 }
 const dishTypes = ["All", "main course", "side dish", "dessert", "appetizer", "salad", "bread",
-    "breakfast", "soup", "beverage", "sauce", "drink"];
+  "breakfast", "soup", "beverage", "sauce", "drink"];
+  
 
 // Export an instance of DinnerModel
 const modelInstance = new DinnerModel();
