@@ -4,6 +4,8 @@ import Welcome from "./Welcome/Welcome";
 import modelInstance from "./data/DinnerModel";
 import SelectDish from "./SelectDish/SelectDish";
 import DishDetail from "./DishDetail/DishDetail";
+import Payment from "./Payment/Payment";
+import Recipe from "./Recipe/Recipe";
 import "./App.css";
 
 class App extends Component {
@@ -40,6 +42,14 @@ class App extends Component {
             render={() => <SelectDish model={modelInstance} />}
           />
           <Route path="/dishdetail/:dishID" render={(props) => (<DishDetail {...props} model={modelInstance} />)} />
+          <Route
+            path="/payment"
+            render={() => <Payment model={modelInstance} />}
+          />
+           <Route
+            path="/recipe"
+            render={() => <Recipe model={modelInstance} />}
+          />
         </header>
       </div>
     );

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Sidebar.css";
+import { Link } from "react-router-dom";
 
 class Sidebar extends Component {
   constructor(props) {
@@ -7,7 +8,9 @@ class Sidebar extends Component {
 
     // we put on state the properties we want to use and modify in the component
     this.state = {
-      numberOfGuests: this.props.model.getNumberOfGuests()
+      numberOfGuests: this.props.model.getNumberOfGuests(),
+      menuDishes: this.props.model.getFullMenu()
+
     };
   }
 
@@ -28,7 +31,9 @@ class Sidebar extends Component {
   // cause the component to re-render
   update() {
     this.setState({
-      numberOfGuests: this.props.model.getNumberOfGuests()
+      numberOfGuests: this.props.model.getNumberOfGuests(),
+      menuDishes: this.props.model.getFullMenu()
+
     });
   }
 
@@ -38,6 +43,24 @@ class Sidebar extends Component {
   };
 
   render() {
+
+    let menuDishes = null;
+    let totalMenuPrice = null;
+    if (this.state.menuDishes) {
+      menuDishes = this.state.menuDishes.map(dsh => (
+        // <li key={dish.id}>{dish.title}</li>
+
+        <tr>
+          <td >{dsh.title}</td>
+          <td >{this.props.model.getDishPrice(dsh.id)}</td>
+        </tr>
+
+
+
+      ));
+      totalMenuPrice = this.props.model.getTotalMenuPrice();
+    }
+
     return (
       <div className="Sidebar">
         <h3>My Dinner</h3>
@@ -66,21 +89,16 @@ class Sidebar extends Component {
           </thead>
 
           <tbody>
-            <tr>
-              <td>
-
-              </td>
-              <td>
-
-              </td>
-            </tr>
+            {menuDishes}
           </tbody>
 
         </table>
-        <p style={{float: "right"}} id="totalprice">SEK 0.0</p>
-        <button type="button" className="btn btn-block disabled btn-secondary" id="comfirmDinner">
+        <p style={{ float: "right" }} id="totalprice">SEK {totalMenuPrice}</p>
+        <Link to="/payment">
+        <button type="button" className={(this.state.menuDishes.length > 0) ? 'btn btn-block btn-primary' : 'btn btn-block disabled btn-secondary'} id="comfirmDinner" disabled={(this.state.menuDishes.length > 0) ? false : true}>
           Confirm Dinner
-                        </button>
+        </button>
+        </Link>
 
       </div>
     );

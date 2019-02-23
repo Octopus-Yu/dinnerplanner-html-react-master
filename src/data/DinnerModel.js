@@ -35,7 +35,7 @@ this.dishes = [];
       totalDishPrice += 1;
     }
 
-    num = this.customers[0].customernum;
+    num = this.getNumberOfGuests();
     return totalDishPrice * num;
 
   }
@@ -82,7 +82,7 @@ this.dishes = [];
    * @returns {Promise<any>}
    */
   getAllDishes() {
-    const url = `${BASE_URL}/recipes/search`;
+    const url = `${BASE_URL}/recipes/search?number=12`;
     return fetch(url, httpOptions)
       .then(this.processResponse)
       // .then(data => {

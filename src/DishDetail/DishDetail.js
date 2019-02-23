@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
-import  modelInstance  from '../data/DinnerModel';
+import modelInstance from '../data/DinnerModel';
 
 class DishDetail extends Component {
     constructor(props) {
@@ -12,6 +12,12 @@ class DishDetail extends Component {
         this.state = {
             status: "LOADING",
         };
+
+        this.handleAddtoMenu = this.handleAddtoMenu.bind(this);
+    }
+
+    handleAddtoMenu() {
+        modelInstance.addDishToMenu(this.props.match.params.dishID);
     }
 
     // this methods is called by React lifecycle when the
@@ -28,15 +34,16 @@ class DishDetail extends Component {
                 modelInstance.getDish(dshID).ingredients = dish.extendedIngredients;
                 modelInstance.getDish(dshID).description = dish.instructions;
                 console.log(modelInstance.getDish(dshID).description);
-                
+
                 this.setState({
                     status: "LOADED",
-                    dish: modelInstance.getDish(dshID),
+                    dish: modelInstance.getDish(dshID)
+
                 });
                 alert(dish.extendedIngredients);
-                console.log("@"+this.state.dish.title);
-               
-           
+                console.log("@" + this.state.dish.title);
+
+
             })
             .catch(() => {
                 this.setState({
@@ -44,6 +51,9 @@ class DishDetail extends Component {
                 });
             });
         this.props.model.addObserver(this);
+        this.setState({
+            numberOfGuests: this.props.model.getNumberOfGuests()
+        });
         //console.log(this.state.dish.extendedIngredients);
 
     }
@@ -53,9 +63,9 @@ class DishDetail extends Component {
     }
 
     update() {
-        // this.setState({
-        //   numberOfGuests: this.props.model.getNumberOfGuests()
-        // });
+        this.setState({
+            numberOfGuests: this.props.model.getNumberOfGuests()
+        });
 
     }
 
@@ -63,11 +73,13 @@ class DishDetail extends Component {
 
     render() {
         alert("render!")
+        let dshDetail = null;
         let dshName = null;
         let dshImage = null;
         let dshDescription = null;
         let ingreList = null;
         let dshPrice = null;
+        let numberOfGuests = this.state.numberOfGuests;
 
         // depending on the state we either generate
         // useful message to the user or show the list
@@ -75,11 +87,38 @@ class DishDetail extends Component {
         switch (this.state.status) {
             case "LOADING":
                 // dishesList = <em>Loading...</em>;
+                dshDetail = (<div id="detailLoading" styly="display:none">
+                    <div className="spinner-grow text-primary" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                    <div className="spinner-grow text-secondary" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                    <div className="spinner-grow text-success" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                    <div className="spinner-grow text-danger" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                    <div className="spinner-grow text-warning" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                    <div className="spinner-grow text-info" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                    <div className="spinner-grow text-light" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                    <div className="spinner-grow text-dark" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+
+                </div>);
                 break;
             case "LOADED":
-            dshName = this.state.dish.title;
-            dshImage = modelInstance.rootURL +this.state.dish.image;
-            dshDescription = this.state.dish.description;
+                dshName = this.state.dish.title;
+                dshImage = modelInstance.rootURL + this.state.dish.image;
+                dshDescription = this.state.dish.description;
 
                 ingreList = this.state.dish.ingredients.map(ingredient => (
                     // <li key={dish.id}>{dish.title}</li>
@@ -93,27 +132,14 @@ class DishDetail extends Component {
 
                 ));
 
-                for (let ingre of this.state.dish.ingredients) {
-                    dshPrice += modelInstance.getNumberOfGuests();
-                }
+                // for (let ingre of this.state.dish.ingredients) {
+                //     dshPrice += modelInstance.getNumberOfGuests();
+                // }
+                dshPrice = this.state.dish.ingredients.length * modelInstance.getNumberOfGuests();
 
 
+                dshDetail = (
 
-
-                break;
-            default:
-                // dishesList = <b>Failed to load data, please try again</b>;
-                break;
-        }
-       // alert(this.state.dish.title);
-
-        return (
-
-            <div className="row">
-
-                <div className="col-md-3" style={{ float: "left" }}>
-                    <Sidebar model={this.props.model} /></div>
-                <div className="col-md-9" style={{ float: "left" }}>
                     <div className="row " id="dishDetail" >
 
                         <div className="col-md-6">
@@ -124,7 +150,9 @@ class DishDetail extends Component {
                                 <div className="card-body">
 
                                     <p className="card-text" id="dshDescription">{dshDescription}</p>
-                                    <a href="#" className="btn btn-primary" id="backtoSearch">Back to research</a>
+                                    <Link to="/search">
+                                        <a href="#" className="btn btn-primary" id="backtoSearch">Back to research</a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -132,8 +160,8 @@ class DishDetail extends Component {
                         <div className="col-md-6">
 
                             <h3 className="text-left" id="ingreNumber">
-                                INGREDIENTS FOR 3 PEOPLE
-                </h3>
+                                INGREDIENTS FOR {numberOfGuests} PEOPLE
+                        </h3>
                             <table className="table" style={{ backgroundcolor: "burlywood" }} id="ingreTable">
                                 <thead>
 
@@ -149,18 +177,34 @@ class DishDetail extends Component {
                                 </tbody>
                             </table>
 
-                            <button type="button" className="btn btn-md btn-primary" id="addtoMenu">
+                            <button type="button" className="btn btn-md btn-primary" id="addtoMenu" onClick={this.handleAddtoMenu}>
                                 Add to menu
-                </button>
+                        </button>
 
                         </div>
                     </div>
-                </div>
-            </div >
+
+
+                );
 
 
 
-        );
+
+                break;
+            default:
+                // dishesList = <b>Failed to load data, please try again</b>;
+                break;
+        }
+        // alert(this.state.dish.title);
+
+        return (<div className="row">
+
+            <div className="col-md-3" style={{ float: "left" }}>
+                <Sidebar model={this.props.model} /></div>
+            <div className="col-md-9" style={{ float: "left" }}>
+                {dshDetail}
+            </div>
+        </div >);
     }
 }
 
