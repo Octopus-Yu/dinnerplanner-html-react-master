@@ -27,7 +27,7 @@ class DishDetail extends Component {
         // when data is retrieved we update the state
         // this will cause the component to re-render
         let dshID = this.props.match.params.dishID;
-        alert(dshID);
+        //alert(dshID);
         modelInstance
             .getSelectedInformation(dshID)
             .then(dish => {
@@ -40,7 +40,7 @@ class DishDetail extends Component {
                     dish: modelInstance.getDish(dshID)
 
                 });
-                alert(dish.extendedIngredients);
+                //alert(dish.extendedIngredients);
                 console.log("@" + this.state.dish.title);
 
 
@@ -72,7 +72,7 @@ class DishDetail extends Component {
 
 
     render() {
-        alert("render!")
+        //alert("render!")
         let dshDetail = null;
         let dshName = null;
         let dshImage = null;
