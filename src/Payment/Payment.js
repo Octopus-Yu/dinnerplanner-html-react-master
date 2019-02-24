@@ -36,7 +36,7 @@ class Payment extends Component {
                 // <li key={dish.id}>{dish.title}</li>
 
                 
-                    <div className="card w-75">
+                    <div className="card w-75"style={{ width: "18rem", float: "left" }}>
                         <div className="card-body">
                             <img className="card-img-top" src={this.props.model.rootURL + dsh.image}>
 

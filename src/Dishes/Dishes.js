@@ -95,7 +95,7 @@ class Dishes extends Component {
     // of returned dishes
     switch (this.state.status) {
       case "LOADING":
-        dishesList = (<div id="detailLoading" styly="display:none">
+        dishesList = (<div id="detailLoading" >
           <div className="spinner-grow text-primary" role="status">
             <span className="sr-only">Loading...</span>
           </div>
